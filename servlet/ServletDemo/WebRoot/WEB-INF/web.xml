@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee   http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+ <servlet>
+  <servlet-name>HelloServlet</servlet-name>
+  <servlet-class>Servlet.HelloServlet</servlet-class>
+ </servlet>
+ <servlet>
+  <description>This is the description of my J2EE component</description>
+  <display-name>This is the display name of my J2EE component</display-name>
+  <servlet-name>MEServlet</servlet-name>
+  <servlet-class>Servlet.MEServlet</servlet-class>
+ </servlet>
+ <servlet>
+  <description>This is the description of my J2EE component</description>
+  <display-name>This is the display name of my J2EE component</display-name>
+  <servlet-name>TestServlet1</servlet-name>
+  <servlet-class>CircleServlet.TestServlet1</servlet-class>
+  <load-on-startup>2</load-on-startup>
+ </servlet>
+ <servlet>
+  <description>This is the description of my J2EE component</description>
+  <display-name>This is the display name of my J2EE component</display-name>
+  <servlet-name>TestServlet2</servlet-name>
+  <servlet-class>CircleServlet.TestServlet2</servlet-class>
+  <load-on-startup>1</load-on-startup>
+ </servlet>
+ <servlet>
+  <description>This is the description of my J2EE component</description>
+  <display-name>This is the display name of my J2EE component</display-name>
+  <servlet-name>ServletPathDirection</servlet-name>
+  <servlet-class>ServletPathDirection.ServletPathDirection</servlet-class>
+ </servlet>
+ <servlet>
+  <description>This is the description of my J2EE component</description>
+  <display-name>This is the display name of my J2EE component</display-name>
+  <servlet-name>ServletInitParameter</servlet-name>
+  <servlet-class>servletInitParameter.ServletInitParameter</servlet-class>
+  <init-param>
+   <param-name>username</param-name>
+   <param-value>admin</param-value>
+  </init-param>
+  <init-param>
+   <param-name>password</param-name>
+   <param-value>123456</param-value>
+  </init-param>
+ </servlet>
+ <servlet-mapping>
+  <servlet-name>HelloServlet</servlet-name>
+  <url-pattern>/servlet/HelloServlet</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>MEServlet</servlet-name>
+  <url-pattern>/servlet/MEServlet</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>TestServlet1</servlet-name>
+  <url-pattern>/servlet/TestServlet1</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>TestServlet2</servlet-name>
+  <url-pattern>/servlet/TestServlet2</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>ServletPathDirection</servlet-name>
+  <url-pattern>/servlet/ServletPathDirection</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>ServletInitParameter</servlet-name>
+  <url-pattern>/servlet/ServletInitParameter</url-pattern>
+ </servlet-mapping>
+ <welcome-file-list>
+  <welcome-file>index.jsp</welcome-file>
+ </welcome-file-list>
+ <login-config>
+  <auth-method>BASIC</auth-method>
+ </login-config>
+</web-app>
