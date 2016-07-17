@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee   http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+ <context-param>
+  <param-name>initParam</param-name>
+  <param-value>Terence</param-value>
+ </context-param>
+ <context-param>
+  <param-name>name</param-name>
+  <param-value>Terence Jing</param-value>
+ </context-param>
+ <listener>
+  <listener-class>listener.FirstListener</listener-class>
+ </listener>
+ <listener>
+  <listener-class>listener.MySessionListener</listener-class>
+ </listener>
+ <listener>
+  <listener-class>listener.MyServletRequestListener</listener-class>
+ </listener>
+ <listener>
+  <listener-class>listener.MyServletContextAttrubuteListener</listener-class>
+ </listener>
+ <listener>
+  <listener-class>listener.MySessionAttributeListener</listener-class>
+ </listener>
+ <listener>
+  <listener-class>listener.MyServletRequestAttributeListener</listener-class>
+ </listener>
+ <welcome-file-list>
+  <welcome-file>index.jsp</welcome-file>
+ </welcome-file-list>
+ <login-config>
+  <auth-method>BASIC</auth-method>
+ </login-config>
+</web-app>
