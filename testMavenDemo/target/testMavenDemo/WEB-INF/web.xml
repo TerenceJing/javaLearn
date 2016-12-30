@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:web="http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee 
+http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
+<!-- 自动生成的DocType默认使用webApp2.3的标准，会自动关闭EL表达式语言，所以此处不使用这个语言 统一替换成版本2.4,默认支持EL -->
+	<display-name>Archetype Created Web Application</display-name>
+	<!--Spring应用上下文，理解层次化的ApplicationContext -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/configs/spring/applicationContext*.xml</param-value>
+	</context-param>
+	<listener>
+		<listener-class>
+			org.springframework.web.context.ContextLoaderListener
+		</listener-class>
+    </listener>
+   
+	<!-- DispatcherServlet,Spring MVC的核心 -->
+
+	<servlet>
+		<servlet-name>mvc-dispatcher</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<!--默认为/WEB-INF/$servlet-name$-servlet.xml，下面语句改变了该默认参数 -->
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/configs/spring/mvc-dispatcher-servlet.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>mvc-dispatcher</servlet-name>
+		<!-- 表示mvc-dispatcher拦截所有请求 -->
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+</web-app>
+
+

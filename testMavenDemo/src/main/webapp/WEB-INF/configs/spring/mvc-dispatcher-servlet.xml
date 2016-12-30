@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="
+    				http://www.springframework.org/schema/beans 
+    				http://www.springframework.org/schema/beans/spring-beans.xsd 
+    				http://www.springframework.org/schema/context
+    				http://www.springframework.org/schema/context/spring-context.xsd
+    				http://www.springframework.org/schema/mvc
+    				http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+	<!-- 名称为mvc-dispatcher的DispatcherServlet提供的Spring MVC配置 -->
+
+	<!-- 激活@Required @Autowired,JSR 250's @PostConstruct @PreDestory and @Resource等标注 -->
+	<!-- 第一，利用annotationContext激活对标签生命周期的管理 ，方便识别标签配置的beans的声明 -->
+	<!-- 附：启动基于Annotation的DI管理 -->
+	<context:annotation-config />
+
+	<!-- 第二,是请求和控制区发生联系 DispatcherServlet上下文，只搜索@Controller标注的类 不搜索其他标注的类 -->
+	<context:component-scan base-package="com.terence.mvcdemo">
+		<context:include-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+	<!-- HandleMapping无需配置，SpringMVC可以默认启动下面的类，解析一些基于注解的AnnotationMapping。 DefaultAnnotationHandlerMapping 
+		annotation-driven HandlerMapping -->
+	<!-- 第三，扩充注解驱动，可以将请求参数绑定到控制器参数，将URL中的参数直接映射到Controller注解中某个方法的参数，功能强大快捷 -->
+	<mvc:annotation-driven />
+	<!-- 静态资源配置，对一些文件用到的图片等资源路径的映射配置 -->
+	<mvc:resources mapping="/resources/**" location="/resources/" />
+
+	<!--  -->
+	
+
+	<!-- 第四，配置ViewResolver告诉DispatcherServlet应该用哪个View ，使用了JSTlView,前缀prefix和后缀suffix来配置 -->
+	<!-- 附：可以配置多个ViewRsolver，但是要使用order属性排序，并且必定要将InternalResolver放在最后，因为它最后会返回一个对象 -->
+
+ <!-- 错误配置
+	  <bean
+		class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		 <property name="order" value="1" />
+		  <property name="mediaTypes">
+			<map>
+				<entry key="html" value="text/html" />
+				<entry key="xml" value="application/html"/>
+				<entry key="json" value="application/json"/>
+			</map>
+		</property>
+		<property name="defaultViews">
+			<list>
+				<bean
+					class="org.springframework.web.servlet.view.json.MappingJackson2JsonView">
+				</bean>
+			</list>
+		</property>
+		<property name="ignoreAcceptHeader" value="true" />
+	</bean>
+	  -->
+	  <!-- 正确的配置1--> 
+	  <bean id="contentNegotiationManager"
+	  	class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+	  	<property name="favorParameter" value="true"/>
+	  	<property name="parameterName" value="format"/>
+	  	<property name="ignoreAcceptHeader" value="false"/>
+	  	<property name="mediaTypes">
+	  		<value>
+				json=application/json
+				xml=application/xml
+			</value>
+	  	</property>
+	  	<property name="defaultContentType" value="text/html"/>
+	  </bean>
+	<!-- 正确的配置2 
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" />  
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">  
+    <property name="messageConverters">  
+        <list>
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">                
+                <property name="supportedMediaTypes">  
+                    <list>
+                        <value>text/html;charset=UTF-8</value>  
+                        <value>application/json;charset=UTF-8</value>  
+                    </list>  
+                </property>  
+            </bean>  
+        </list>  
+    </property>  
+</bean> 
+--> 
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/WEB-INF/jsps/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	<!-- 200*1024*1024即200M的上传大小  resolvelazily属性启用是为了推迟文件解析，以便扑获文件大小异常 
+		需要在依赖管理中引入阿帕奇的依赖包
+		-->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="209715200"/>
+		<property name="defaultEncoding" value="UTF-8"/>
+		<property name="resolveLazily" value="true"/>		
+	</bean>
+
+</beans>
