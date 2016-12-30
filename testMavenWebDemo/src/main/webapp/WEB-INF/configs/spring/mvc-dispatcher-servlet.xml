@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans  xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+    xmlns:context="http://www.springframework.org/schema/context"   
+    xmlns:mvc="http://www.springframework.org/schema/mvc"  
+    xsi:schemaLocation="
+    				http://www.springframework.org/schema/beans 
+    				http://www.springframework.org/schema/beans/spring-beans.xsd 
+    				http://www.springframework.org/schema/context
+    				http://www.springframework.org/schema/context/spring-context.xsd
+    				http://www.springframework.org/schema/mvc
+    				http://www.springframework.org/schema/mvc/spring-mvc.xsd">  
+  
+  
+	  <!-- 激活@Required @Autowired,JSR 250's @PostConstruct @PreDestory and @Resource等标注 -->
+	  <!-- 第一，利用annotationContext激活对标签生命周期的管理 ，方便识别标签配置的beans的声明-->
+	  <context:annotation-config/>
+	  
+	  <!-- 第二,是请求和控制区发生联系
+	  			DispatcherServlet上下文，只搜索@Controller标注的类 不搜索其他标注的类 -->
+	  <context:component-scan base-package="com.terence.mvcdemo">
+	  	<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	  </context:component-scan>
+	  
+	  <!-- 第三，利用此标签让DispatcherServlet启用基于Annotation的HandlerMapping -->
+	  <mvc:annotation-driven/>
+	  <!-- 第四，配置ViewResolver告诉DispatcherServlet应该用哪个View ，使用了JSTlView,前缀prefix和后缀suffix来配置 -->
+	  <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	  	<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+	  	<property name="prefix" value="/WEB-INF/jsps/"/>
+	  	<property name="suffix" value=".jsp"/>
+	  </bean>
+  </beans>
