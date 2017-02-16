@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd">  
+        
+        <bean id="terenceBeforeAdvice" class="com.terence.aop.api.TerenceBeforeAdvice"/>
+        <bean id="terenceAfterReturningAdvice" class="com.terence.aop.api.TerenceAfterReturningAdvice"/>
+        <bean id="terenceMethodInterceptor" class="com.terence.aop.api.TerenceMethodInterceptor"/>
+        <bean id="terenceThrowsAdvice" class="com.terence.aop.api.TerenceThrowsAdvice"/>
+        
+        <!--实现方式一  -->
+<!--       
+  <bean id="bizLogicImplTarget" class="com.terence.aop.api.BizLogicImpl"/>
+        <bean id="pointcutBean" class="org.springframework.aop.support.NameMatchMethodPointcut">
+			<property name="mappedNames">
+	      		<list>
+	        		<value>sa*</value>
+				</list>
+			</property>
+		</bean>
+		
+		<bean id="defaultAdvisor" class="org.springframework.aop.support.DefaultPointcutAdvisor">
+			<property name="advice" ref="terenceBeforeAdvice"/>
+			<property name="pointcut" ref="pointcutBean"/>			
+		</bean>
+		
+		<bean id="bizLogicImpl" class="org.springframework.aop.framework.ProxyFactoryBean">
+			<property name="target">
+				<ref bean="bizLogicImplTarget"/>
+			</property>
+			
+			<property name="interceptorNames">
+				<list>
+					<value>defaultAdvisor</value>
+					<value>terenceAfterReturningAdvice</value>
+					<value>terenceMethodInterceptor</value>
+					<value>terenceThrowsAdvice</value>
+				</list>
+			</property>
+		</bean> -->
+		
+		
+		<!-- 实现方式二 -->
+		<!-- 指定了实现类的接口，所以会用JDK的代理-->
+<!-- 		<bean id="bizLogicImplTarget" class="com.terence.aop.api.BizLogicImpl"/>
+        <bean id="bizLogicImpl" class="org.springframework.aop.framework.ProxyFactoryBean">
+			<property name="proxyInterfaces">
+	      		<value>com.terence.aop.api.BizLogic</value>
+			</property>
+			<property name="target">
+				<ref bean="bizLogicImplTarget"/>				
+			</property>
+			<property name="interceptorNames">
+				<list>
+					<value>terenceBeforeAdvice</value>
+					<value>terenceAfterReturningAdvice</value>
+					<value>terenceMethodInterceptor</value>
+					<value>terenceThrowsAdvice</value>
+				</list>
+			</property>
+		</bean>	 -->
+		
+		<!-- 实现方式三 -->
+		<!-- 通过简化的Proxy定义 -->
+		<bean id="baseProxyBean" class="org.springframework.aop.framework.ProxyFactoryBean"
+		 			lazy-init="true" abstract="true"></bean>
+		                          <!--指向父抽象Bean-->		
+        <bean id="bizLogicImpl" parent="baseProxyBean">
+	        <property name="target">
+	        	<bean class="com.terence.aop.api.BizLogicImpl"/>
+	        </property>
+			<property name="proxyInterfaces">
+	      		<value>com.terence.aop.api.BizLogic</value>
+			</property>
+			<property name="interceptorNames">
+				<list>
+					<value>terenceBeforeAdvice</value>
+					<value>terenceAfterReturningAdvice</value>
+					<value>terenceMethodInterceptor</value>
+					<value>terenceThrowsAdvice</value>
+				</list>
+			</property>
+		</bean>	
+		<!-- <bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+			<property name="beanNames" value="jdk*,onlyJdk">	</property>
+			<property name="interceptorNames">
+				<list>
+					<value>myInterceptor</value>
+				</list>
+			</property>
+		</bean> -->
+</beans>

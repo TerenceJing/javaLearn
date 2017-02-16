@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">   
+       
+       <!-- 配置aop切面 -->       
+       <bean id="terenceAspect" class="com.terence.aop.schema.advice.TerenceAspect"/>
+       <bean id="aspectBiz" class="com.terence.aop.schema.advice.biz.AspectBiz"/>
+       <aop:config>
+       		<aop:aspect id="terenceAspectAOP" ref="terenceAspect">		
+       			
+<!--        			配置aop切面切入点pointcut；* com之间必须加入空格
+       			<aop:pointcut expression="execution(* com.terence.aop.schema.advice.biz.*Biz.*(..))" id="terencePointcut"/>
+       			
+       			配置通知
+       			前置通知
+       			<aop:before method="before" pointcut-ref="terencePointcut"/>
+       			后置通知
+       			<aop:after-returning method="afterReturning" pointcut-ref="terencePointcut"/>
+       			
+       			异常抛出通知：只有业务类抛出异常后才会执行此抛出异常通知，但是不会执行afterreturning
+       			<aop:after-throwing method="afterThrowing" pointcut-ref="terencePointcut"/>
+       			
+       			结束通知：无论业务类是否正常执行，after (finally)这个切入通知都会被执行
+       			<aop:after method="after" pointcut-ref="terencePointcut"/>
+       			
+       			环绕通知：对应类中方法第一个参数必须是ProceedingJoinPoint
+       			<aop:around method="around" pointcut-ref="terencePointcut"/> -->
+       			
+       			<!-- 声明带参数的around方法 -->
+       			<aop:around method="aroundInit" pointcut="execution(* com.terence.aop.schema.advice.biz.AspectBiz.init(String,int)) and args(bizName,times)"/>
+       			<aop:declare-parents 
+       				types-matching="com.terence.aop.schema.advice.biz.*(..)" 
+       				implement-interface="com.terence.aop.schema.advice.Fit"
+       				default-impl="com.terence.aop.schema.advice.FitImpl"/>
+       		</aop:aspect>
+       </aop:config>
+         
+       
+ </beans>
