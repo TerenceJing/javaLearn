@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans xmlns="http://www.springframework.org/schema/beans" 
+       
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xmlns:context="http://www.springframework.org/schema/context" 
+       xmlns:aop="http://www.springframework.org/schema/aop"  
+       xmlns:tx="http://www.springframework.org/schema/tx" 
+    xsi:schemaLocation=" http://www.springframework.org/schema/beans  
+    	http://www.springframework.org/schema/beans/spring-beans.xsd 
+    	http://www.springframework.org/schema/context  
+   		http://www.springframework.org/schema/context/spring-context.xsd       
+    	http://www.springframework.org/schema/tx  
+    	http://www.springframework.org/schema/tx/spring-tx.xsd  
+    	http://www.springframework.org/schema/aop  
+    	http://www.springframework.org/schema/aop/spring-aop.xsd">  
+    
+    <!-- 上文最Spring开发最全的约束 -->
+    <!-- 引入外部 属性文件-->
+    <context:property-placeholder location="classpath:jdbc.properties"/>
+    
+    <!-- 配置c3p0的连接池 -->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+    	<property name="driverClass" value="${jdbc.driverClass}"/>
+    	<property name="jdbcUrl" value="${jdbc.url}"/>
+    	<property name="user" value="${jdbc.username}"/>
+    	<property name="password" value="${jdbc.password}"/>
+    </bean>
+    
+    <!-- 配置业务层的类 -->
+    <bean id="accountService" class="cn.terence.spring.demo2.AccountServiceImpl">
+    	<property name="accountDao" ref="accountDao"/>
+    </bean>
+    
+     <!-- 配置Dao层的类 -->
+    <bean id="accountDao" class="cn.terence.spring.demo2.AccountDaoImpl">
+    	<!-- 注入连接池，可以利用jdbc的jar包里面的连接池创建模板 -->
+    	<property name="dataSource" ref="dataSource"/>
+    </bean>
+    
+    <!-- 配置事物管理器 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    	<property name="dataSource" ref="dataSource"></property>
+    </bean>
+    
+    <!-- 配置业务层代理 -->
+    <bean id="accountServiceProxy" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+    	<!-- 配置目标对象，要增强的类 -->
+    	<property name="target" ref="accountService"/>
+    	
+    	<!-- 注入事务管理器 -->
+    	<property name="transactionManager" ref="transactionManager"/>
+    	
+    	<!-- 注入事务属性 -->
+    	<property name="transactionAttributes">
+    		<props>
+    			<!-- prop格式  
+    			key：类中的方法名称
+    			PROPAGATION：事务的传播行为
+    			ISOLATION:事务的隔离级别
+    			readOnly:只读(不可以进行修改操作)
+    			-Exception:发生哪些异常回滚事务
+    			+Exception:发生哪些异常不回滚事务
+    			<prop key="insert*">PROPAGATION_REQUIRED</prop>
+    			<prop key="update*">PROPAGATION_REQUIRED</prop>
+    			<prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
+    			-->
+    			<!--
+    			PROPAGATION_REQUIRED：事务传播行为，表示将两种操作放在同一个事务中。
+    			-java.lang.ArithmeticException：出现此异常发生回滚
+    			  -->
+    			<prop key="transfer">PROPAGATION_REQUIRED,-java.lang.ArithmeticException</prop>
+    			
+    		</props>
+    	</property>
+    </bean>
+    
+ </beans>
