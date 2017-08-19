@@ -1,0 +1,15 @@
+# 默认的配置文件，可以直接在此配置当中配置属性，也可以在此配置文件激活其他配置文件
+spring:
+   profiles:
+        active: dev
+   datasource:
+        driver-class-name: com.mysql.jdbc.Driver
+        url: jdbc:mysql://127.0.0.1:3306/girl
+        username: root
+        password: root
+   jpa:
+        hibernate:
+            #ddl-auto: create #每次运行程序会自动创建要给空表，如果存在了这个表，会自动删除，然后创建一个同名的空表
+            ddl-auto: update #第一运行的时候会自动创建空表，之后运行保留原有表格数据，并更新
+            #ddl-auto: create-drop #应用结束，就会删除创建的表格。
+        show-sql: true

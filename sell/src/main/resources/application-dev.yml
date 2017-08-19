@@ -1,0 +1,6 @@
+server:
+    port: 8081
+    context-path: /sell
+high: 1.75
+age: 25
+content: "high:${high}, age:${age}"
